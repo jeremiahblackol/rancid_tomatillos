@@ -1,0 +1,12 @@
+article {
+    height: 350px;
+    width: 150px;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid black;
+}
+
+img {
+    width: 150px;
+    height: auto;
+}

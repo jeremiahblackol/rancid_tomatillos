@@ -20,7 +20,9 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Movies movies={this.state.allMovies}/>
+        <section className='movie-card-section'>
+          <Movies movies={this.state.allMovies}/>
+        </section>
       </div>
     );
   }
