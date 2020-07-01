@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Movies from './Movies';
 import Header from './Header';
+import LoginForm from './LoginForm'
 
 class App extends React.Component {
   constructor() {
@@ -32,7 +33,11 @@ class App extends React.Component {
       )
   }
 
-  render() {
+  handleClick = () => {
+    console.log('hello')
+  }
+
+  render(props) {
     const { error, isLoaded, allMovies } = this.state;
     
     if (error) {
@@ -42,7 +47,7 @@ class App extends React.Component {
     } else {
       return (
         <div className="App">
-          <Header />
+          <Header handleClick={this.handleClick}/>
           <section className='movie-card-section'>
             <Movies movies={allMovies}/>
           </section>
