@@ -41,13 +41,14 @@ class App extends React.Component {
   render() {
 
     return (
+      <div>
+      <h1>Rancid Tomatillos</h1>
       <Router>
        <main>
          <nav>
            <ul>
              <li><a href="/">Home</a></li>
              <li><a href="/login">Login</a></li>
-             <li><a href="/contact">Contact</a></li>
            </ul>
          </nav>
        <Switch>
@@ -61,22 +62,11 @@ class App extends React.Component {
           </Route>
        </Switch>
    
-       <Route path="/" component={Home} />
        </main>
    </Router>
+   </div>
      );
    }
-    // return (
-
-    //   <Router>
-    //     <div>
-
-    //     </div>
-    //   </Router>
-  
-    // )
-    //     } 
-
 }
 
 export default App;

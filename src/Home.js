@@ -1,5 +1,4 @@
 import React from 'react'
-import Header from './Header'
 import Movies from './Movies'
 
 function Home(props) {
@@ -10,7 +9,7 @@ function Home(props) {
     } else {
         return (
         <div className="App">
-        <Header />
+   
         <section className='movie-card-section'>
             <Movies movies={props.allMovies}/>
         </section>
