@@ -1,8 +1,13 @@
 import React from 'react';
 import './App.css';
-import Movies from './Movies';
-import Header from './Header';
 import LoginForm from './LoginForm'
+import Home from './Home'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 class App extends React.Component {
   constructor() {
@@ -33,28 +38,45 @@ class App extends React.Component {
       )
   }
 
-  handleClick = () => {
-    console.log('hello')
-  }
+  render() {
 
-  render(props) {
-    const { error, isLoaded, allMovies } = this.state;
-    
-    if (error) {
-      return <h1>ERROR: {error.message}</h1>
-    } else if (!isLoaded) {
-      return <div>loading...</div>
-    } else {
-      return (
-        <div className="App">
-          <Header handleClick={this.handleClick}/>
-          <section className='movie-card-section'>
-            <Movies movies={allMovies}/>
-          </section>
-        </div>
-      );
-    }
-  }
+    return (
+      <Router>
+       <main>
+         <nav>
+           <ul>
+             <li><a href="/">Home</a></li>
+             <li><a href="/login">Login</a></li>
+             <li><a href="/contact">Contact</a></li>
+           </ul>
+         </nav>
+       <Switch>
+           <Route exact path="/">
+       <Home error={ this.state.error } 
+             isLoaded={ this.state.isLoaded }
+             allMovies={ this.state.allMovies } />
+           </Route>
+           <Route path="/login">
+            <LoginForm />
+          </Route>
+       </Switch>
+   
+       <Route path="/" component={Home} />
+       </main>
+   </Router>
+     );
+   }
+    // return (
+
+    //   <Router>
+    //     <div>
+
+    //     </div>
+    //   </Router>
+  
+    // )
+    //     } 
+
 }
 
 export default App;
