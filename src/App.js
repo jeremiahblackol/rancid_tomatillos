@@ -1,7 +1,13 @@
 import React from 'react';
 import './App.css';
-import Movies from './Movies';
-import Header from './Header';
+import LoginForm from './LoginForm'
+import Home from './Home'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 class App extends React.Component {
   constructor() {
@@ -33,23 +39,34 @@ class App extends React.Component {
   }
 
   render() {
-    const { error, isLoaded, allMovies } = this.state;
-    
-    if (error) {
-      return <h1>ERROR: {error.message}</h1>
-    } else if (!isLoaded) {
-      return <div>loading...</div>
-    } else {
-      return (
-        <div className="App">
-          <Header />
-          <section className='movie-card-section'>
-            <Movies movies={allMovies}/>
-          </section>
-        </div>
-      );
-    }
-  }
+
+    return (
+      <div>
+      <h1>Rancid Tomatillos</h1>
+      <Router>
+       <main>
+         <nav>
+           <ul>
+             <li><a href="/">Home</a></li>
+             <li><a href="/login">Login</a></li>
+           </ul>
+         </nav>
+       <Switch>
+           <Route exact path="/">
+       <Home error={ this.state.error } 
+             isLoaded={ this.state.isLoaded }
+             allMovies={ this.state.allMovies } />
+           </Route>
+           <Route path="/login">
+            <LoginForm />
+          </Route>
+       </Switch>
+   
+       </main>
+   </Router>
+   </div>
+     );
+   }
 }
 
 export default App;
