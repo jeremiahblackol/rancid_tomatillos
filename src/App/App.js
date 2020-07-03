@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import LoginForm from './LoginForm'
-import Home from './Home'
+import LoginForm from '../LoginForm/LoginForm'
+import Home from '../Home/Home'
 import {
   BrowserRouter as Router,
   Switch,
@@ -38,6 +38,11 @@ class App extends React.Component {
       )
   }
 
+  handleClick() {
+    console.log('log in was clicked');
+    
+  }
+
   render() {
 
     return (
@@ -51,14 +56,17 @@ class App extends React.Component {
              <li><a href="/login">Login</a></li>
            </ul>
          </nav>
+
        <Switch>
            <Route exact path="/">
-       <Home error={ this.state.error } 
+            <Home error={ this.state.error } 
              isLoaded={ this.state.isLoaded }
              allMovies={ this.state.allMovies } />
            </Route>
            <Route path="/login">
-            <LoginForm />
+            <LoginForm 
+              handleClick={this.handleClick}
+            />
           </Route>
        </Switch>
    
