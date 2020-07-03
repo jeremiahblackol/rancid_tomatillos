@@ -16,6 +16,7 @@ class App extends React.Component {
       error: null,
       isLoaded: false,
       allMovies: [],
+      userInfo: {},
     }
   }
 
@@ -38,7 +39,7 @@ class App extends React.Component {
       )
   }
 
-  handleSubmit(info) {
+  handleSubmit = (info) => {
     fetch('https://rancid-tomatillos.herokuapp.com/api/v2/login', {
       method: 'POST',
       headers: {
@@ -50,9 +51,22 @@ class App extends React.Component {
       }),
     })
       .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(err => console.error(err))
+      .then(data => this.getUserRatings(data.user))
+    ;
   }
+
+  getUserRatings = (info) => {
+    this.setState({ userInfo: info })
+    console.log(this.state.userInfo);
+    
+    fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/users/${info.id}/ratings`)
+      .then(response => response.json())
+      .then(data =>   this.setState(prevState => {
+        prevState.userInfo.ratings = data.ratings 
+        }))
+  }
+
+
 
   render() {
 
