@@ -38,9 +38,20 @@ class App extends React.Component {
       )
   }
 
-  handleClick() {
-    console.log('log in was clicked');
-    
+  handleSubmit(info) {
+    fetch('https://rancid-tomatillos.herokuapp.com/api/v2/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/JSON'
+      },
+      body: JSON.stringify({
+        email: info.email,
+        password: info.password
+      }),
+    })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(err => console.error(err))
   }
 
   render() {
@@ -65,7 +76,7 @@ class App extends React.Component {
            </Route>
            <Route path="/login">
             <LoginForm 
-              handleClick={this.handleClick}
+              handleSubmit={this.handleSubmit}
             />
           </Route>
        </Switch>

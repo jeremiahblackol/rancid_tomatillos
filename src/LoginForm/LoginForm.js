@@ -1,14 +1,33 @@
 import React from 'react';
 
 
-function LoginForm(props) {
-    return (
-        <section className= 'login'>
-            <input className= 'form-input' placeholder= 'email'></input>
-            <input className= 'form-input' placeholder= 'password'></input>
-            <button className= 'enter' onClick= {props.handleClick}>Log In</button>
-        </section>
-    )
+class LoginForm extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            email: '',
+            password: '',
+        }
+    }
+
+    handleChange = (event) => {
+        this.setState({ [event.target.name]: event.target.value });
+    }
+
+    submit = (event) => {
+        event.preventDefault();
+        this.props.handleSubmit(this.state);
+    }
+
+    render() {
+        return (
+            <form className= 'login' onSubmit= {this.submit}>
+                <input type= 'text' name= 'email' className= 'form-input' placeholder= 'email' onChange={this.handleChange}></input>
+                <input type= 'password' name= 'password' className= 'form-input' placeholder= 'password' onChange={this.handleChange}></input>
+                <button className= 'enter'>Log In</button>
+            </form>
+        )
+    }
 }
 
 export default LoginForm;
