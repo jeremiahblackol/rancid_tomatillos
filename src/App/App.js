@@ -58,13 +58,9 @@ class App extends React.Component {
           this.getUserRatings(data.user)
         },
         (error) => {
-            this.redirectToLogin();
+            alert('Email or password is incorrect, please try again.')
         });
       
-  }
-
-  redirectToLogin = () => {
-    return <Redirect to='/login'/>
   }
 
   getUserRatings = (info) => {
