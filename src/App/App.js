@@ -10,6 +10,8 @@ import {
   Redirect
 } from "react-router-dom";
 
+import MovieDisplay from '../MovieDisplay/MovieDisplay';
+
 class App extends React.Component {
   constructor() {
     super();
@@ -78,6 +80,13 @@ class App extends React.Component {
     }
   }
 
+  showMoviePage = (routerProps) => {
+    let foundMovie = this.state.allMovies.find(movie => movie.id == routerProps)
+    console.log(foundMovie)
+    console.log(MovieDisplay)
+    return (foundMovie ? <MovieDisplay /> : console.log('err'))
+  }
+
   render() {
 
     return (
@@ -89,7 +98,8 @@ class App extends React.Component {
       <Route exact path="/">
        <Home error={ this.state.error } 
         isLoaded={ this.state.isLoaded }
-        allMovies={ this.state.allMovies } />
+        allMovies={ this.state.allMovies } 
+        showMoviePage={this.showMoviePage}/>
       </Route>
       <Route path="/login">
        <LoginForm 
@@ -97,6 +107,9 @@ class App extends React.Component {
          loggedIn={this.state.loggedIn}
        />
      </Route>
+     <Route path="/movie/:id" render={routerProps => this.showMoviePage(routerProps)}/>
+       
+     
     </Switch>
       </main>
     </Router>

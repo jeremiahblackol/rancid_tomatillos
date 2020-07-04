@@ -11,7 +11,8 @@ function Home(props) {
         <div className="App">
    
         <section className='movie-card-section'>
-            <Movies movies={props.allMovies}/>
+            <Movies movies={props.allMovies}
+            showMoviePage={props.showMoviePage}/>
         </section>
         </div>
         )
