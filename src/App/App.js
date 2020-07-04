@@ -1,12 +1,13 @@
 import React from 'react';
 import './App.css';
-import LoginForm from '../LoginForm/LoginForm'
-import Home from '../Home/Home'
+import Header from '../Header/Header';
+import LoginForm from '../LoginForm/LoginForm';
+import Home from '../Home/Home';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Redirect
 } from "react-router-dom";
 
 class App extends React.Component {
@@ -17,6 +18,7 @@ class App extends React.Component {
       isLoaded: false,
       allMovies: [],
       userInfo: {},
+      loggedIn: false,
     }
   }
 
@@ -51,54 +53,57 @@ class App extends React.Component {
       }),
     })
       .then(response => response.json())
-      .then(data => this.getUserRatings(data.user))
-    ;
+      .then(
+        (data) => {
+          this.getUserRatings(data.user)
+        },
+        (error) => {
+            this.redirectToLogin();
+        });
+      
+  }
+
+  redirectToLogin = () => {
+    return <Redirect to='/login'/>
   }
 
   getUserRatings = (info) => {
-    this.setState({ userInfo: info })
-    console.log(this.state.userInfo);
+    if (info) {
+      this.setState({ 
+        userInfo: info,
+        loggedIn: true 
+      })
     
     fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/users/${info.id}/ratings`)
       .then(response => response.json())
       .then(data =>   this.setState(prevState => {
         prevState.userInfo.ratings = data.ratings 
     }))
-  }
-
-  updateURL = (url) => {
-    this.setState({currentURL: url})
+    }
   }
 
   render() {
 
     return (
       <div>
-      <h1>Rancid Tomatillos</h1>
       <Router>
-       <main>
-         <nav>
-           <ul>
-             <li><a href="/home">Home</a></li>
-             <li><a href="/login">Login</a></li>
-           </ul>
-         </nav>
-
-       <Switch>
-           <Route exact path="/home">
-            <Home error={ this.state.error } 
-             isLoaded={ this.state.isLoaded }
-             allMovies={ this.state.allMovies } />
-           </Route>
-           <Route path="/login">
-            <LoginForm 
-              handleSubmit={this.handleSubmit}
-            />
-          </Route>
-       </Switch>
-   
-       </main>
-   </Router>
+      <main>
+      <Header userInfo={this.state.userInfo} />
+      <Switch>
+      <Route exact path="/">
+       <Home error={ this.state.error } 
+        isLoaded={ this.state.isLoaded }
+        allMovies={ this.state.allMovies } />
+      </Route>
+      <Route path="/login">
+       <LoginForm 
+         handleSubmit={this.handleSubmit}
+         loggedIn={this.state.loggedIn}
+       />
+     </Route>
+    </Switch>
+      </main>
+    </Router>
    </div>
      );
    }

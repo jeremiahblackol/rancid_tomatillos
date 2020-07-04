@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     BrowserRouter as Router,
-    NavLink
+    Redirect
   } from "react-router-dom";
 
 
@@ -19,8 +19,10 @@ class LoginForm extends React.Component {
     }
 
     submit = (event) => {
+        event.preventDefault();
         this.props.handleSubmit(this.state);
         this.clearInputs();
+        
     }
 
     clearInputs = () => {
@@ -31,6 +33,10 @@ class LoginForm extends React.Component {
     }
 
     render() {
+        const loggedIn = this.props.loggedIn;
+        if (loggedIn) {
+            return <Redirect to='/' />
+        } else {
         return (
             <form className= 'login'>
                 <input 
@@ -49,11 +55,10 @@ class LoginForm extends React.Component {
                     onChange={this.handleChange}
                     value= {this.state.password}>
                 </input>
-                <NavLink to='/home'>
                     <button className= 'enter' onClick={this.submit}>Log In</button>
-                </NavLink>
             </form>
         )
+    }
     }
 }
 
