@@ -3,11 +3,15 @@ import LoginForm from './LoginForm';
 
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import { BrowserRouter } from 'react-router-dom';
+
 
 describe('Login Form', () => {
 
     it('should render correctly', () => {
-      const { getByText, getByRole, getByPlaceholderText } = render(<LoginForm />);
+      const { getByText, getByRole, getByPlaceholderText } = render( <BrowserRouter>
+        <LoginForm />
+      </BrowserRouter>);
   
       const emailInput = getByPlaceholderText('email');
       const passwordInput = getByPlaceholderText('password');
@@ -22,9 +26,12 @@ describe('Login Form', () => {
     it('should be able to login', () => {
         const mockLogIn = jest.fn();
         const { getByRole } = render(
-            <LoginForm 
-                handleClick={mockLogIn}
-            />);
+            <BrowserRouter>
+                <LoginForm 
+                    handleSubmit={mockLogIn}
+                />
+            </BrowserRouter>
+            );
     
         const button = getByRole('button', {name: 'Log In'});
         fireEvent.click(button);

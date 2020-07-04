@@ -63,10 +63,12 @@ class App extends React.Component {
       .then(response => response.json())
       .then(data =>   this.setState(prevState => {
         prevState.userInfo.ratings = data.ratings 
-        }))
+    }))
   }
 
-
+  updateURL = (url) => {
+    this.setState({currentURL: url})
+  }
 
   render() {
 
@@ -77,13 +79,13 @@ class App extends React.Component {
        <main>
          <nav>
            <ul>
-             <li><a href="/">Home</a></li>
+             <li><a href="/home">Home</a></li>
              <li><a href="/login">Login</a></li>
            </ul>
          </nav>
 
        <Switch>
-           <Route exact path="/">
+           <Route exact path="/home">
             <Home error={ this.state.error } 
              isLoaded={ this.state.isLoaded }
              allMovies={ this.state.allMovies } />

@@ -4,12 +4,16 @@ import LoginForm from '../LoginForm/LoginForm'
 
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import { BrowserRouter } from 'react-router-dom';
 
 
 describe('App', () => {
 
   it('should render correctly', () => {
-    const { getByText, getByRole } = render(<App />);
+    const { getByText, getByRole } = render(
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>);
 
     const homeLink = getByText('Home');
     const loginLink = getByText('Login');
@@ -20,8 +24,13 @@ describe('App', () => {
   });
 
   it('should be able to go to login page', () => {
-    const { getByText } = render(<App />);
-    const { getByPlaceholderText } = render(<LoginForm />);
+    const { getByText } = render( 
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>);
+    const { getByPlaceholderText } = render( <BrowserRouter>
+      <LoginForm />
+    </BrowserRouter>);
 
     const logIn = getByText('Login');
     const emailInput = getByPlaceholderText('email');
