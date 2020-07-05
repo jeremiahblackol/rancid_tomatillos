@@ -1,12 +1,19 @@
 import React from 'react';
 
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Redirect
+  } from "react-router-dom";
+
 
 class MovieDisplay extends React.Component {
     constructor() {
         super();
         this.state = {
-            movie: {},
-            video: []
+            movie: null,
+            video: null
         }
     }
 
@@ -17,31 +24,38 @@ class MovieDisplay extends React.Component {
 
     componentDidMount() {
         Promise.all([
-            fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/movies/${this.props.movieId}`),
-            fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/movies/${this.props.movieId}/videos`),
+            fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/movies/${this.props.movie.id}`)
+            .then(response => response.json()),
+            fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/movies/${this.props.movie.id}/videos`)
+            .then(response => response.json())
 
-        ]).then(response => response.json())
-        //need to pass the movie id in when a movie card is clicked
-        //need to add a click event to movie cards
-        .then((data) =>  {
-            this.setState({
-                movie: data[0],
-                video: data[1]
-        })
+        ])
+        .then(data => this.movieAndVideoState(data))
+
         .catch(err => console.error(err))
         //   (error) => {
         //     this.setState({
         //       isLoaded: true,
         //       error,
-        //     })
-          }
-        )
+            // })
+        //   }
+        // )
+    }
+
+    movieAndVideoState = (info) => {
+        if (info) {
+            this.setState({
+                movie: info[0].movie,
+                video: info[1].videos
+            })
+        }
+
+        console.log(this.state)
     }
 
     render() {
-        console.log('hello')
+        console.log(this.props.movie)
         return (
-
             <div>
                 <p>
                 Hello

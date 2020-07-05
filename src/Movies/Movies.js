@@ -10,7 +10,7 @@ class Movies extends React.Component {
 
     showPage = (event) => {
         console.log(event.target.parentNode.id)
-        this.props.showMoviePage(event.target.parentNode.id)
+        // this.props.showMoviePage(event.target.parentNode.id)
     }
 
     render() {
@@ -27,9 +27,9 @@ class Movies extends React.Component {
                     <img 
                         src={movie.poster_path} 
                         alt={`${movie.title} poster`} 
-                        onClick={this.showPage}
+                        
                     />
-                    <h3 onClick={this.showPage}>{movie.title}</h3>
+                    <h3>{movie.title}</h3>
                     <p> Average rating: {Math.round(movie.average_rating)}</p>
                 </article>
                 </NavLink>
