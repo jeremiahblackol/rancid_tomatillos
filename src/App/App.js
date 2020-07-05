@@ -10,6 +10,8 @@ import {
   Redirect
 } from "react-router-dom";
 
+import MovieDisplay from '../MovieDisplay/MovieDisplay';
+
 class App extends React.Component {
   constructor() {
     super();
@@ -19,6 +21,7 @@ class App extends React.Component {
       allMovies: [],
       userInfo: {},
       loggedIn: false,
+      currentMovie: {}
     }
   }
 
@@ -78,18 +81,31 @@ class App extends React.Component {
     }
   }
 
-  render() {
+  showMoviePage = (routerProps) => {
+    let movieID = parseInt(routerProps.match.params.id)
+    let foundMovie = this.state.allMovies.find(movie => movie.id === movieID)
+    // this.setState({ currentMovie: foundMovie})
 
+    
+    // figure out how to render movie display, it recognizes it but it will not render it.
+    console.log(routerProps)
+
+    return (foundMovie ? <MovieDisplay movie={foundMovie}/> : null)
+  }
+
+  render() {
     return (
       <div>
-      <Router>
+    
       <main>
       <Header userInfo={this.state.userInfo} />
       <Switch>
       <Route exact path="/">
        <Home error={ this.state.error } 
         isLoaded={ this.state.isLoaded }
-        allMovies={ this.state.allMovies } />
+        allMovies={ this.state.allMovies } 
+        // showMoviePage={ this.showMoviePage }
+        />
       </Route>
       <Route path="/login">
        <LoginForm 
@@ -97,12 +113,14 @@ class App extends React.Component {
          loggedIn={this.state.loggedIn}
        />
      </Route>
+     <Route path={'/movies/:id'}render={ routerProps => this.showMoviePage(routerProps)} />
     </Switch>
       </main>
-    </Router>
+  
    </div>
      );
+    }
    }
-}
+// }
 
 export default App;
