@@ -94,10 +94,6 @@ class App extends React.Component {
   }
 
   render() {
-    // if (this.state.currentMovie) {
-    //   return <MovieDisplay />
-    // } else {
-
     return (
       <div>
     

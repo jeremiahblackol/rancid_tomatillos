@@ -13,7 +13,9 @@ class MovieDisplay extends React.Component {
         super();
         this.state = {
             movie: null,
-            video: null
+            video: null,
+            isLoaded: false,
+            error: null
         }
     }
 
@@ -30,39 +32,54 @@ class MovieDisplay extends React.Component {
             .then(response => response.json())
 
         ])
-        .then(data => this.movieAndVideoState(data))
-
-        .catch(err => console.error(err))
-        //   (error) => {
-        //     this.setState({
-        //       isLoaded: true,
-        //       error,
-            // })
-        //   }
-        // )
+        .then(
+            (data) => {this.movieAndVideoState(data)
+            },
+            (error) => {
+              this.setState({
+                isLoaded: true,
+                error,
+              })
+            }
+          )
     }
 
-    movieAndVideoState = (info) => {
-        if (info) {
-            this.setState({
-                movie: info[0].movie,
-                video: info[1].videos
-            })
-        }
-
-        console.log(this.state)
-    }
+     movieAndVideoState = (info) => {
+         if (info) {
+             this.setState({
+                 movie: info[0].movie,
+                 video: info[1].videos,
+                   isLoaded: true,
+             })
+         }
+     }
 
     render() {
-        console.log(this.props.movie)
+        if (this.state.error) {
+            return <h1>ERROR: {this.state.error.message}</h1>
+         } else if (!this.state.isLoaded) {
+            return <div>loading...</div>
+         } else {
+
         return (
             <div>
-                <p>
-                Hello
-                </p>
+                <header>
+                <h2>
+                { this.state.movie.title }
+                </h2>
+                <img 
+                    src={ this.state.movie.backdrop_path }
+                    alt={ this.state.movie.title}/>
+                </header>
+                <img
+                    src={ this.state.movie.poster_path}
+                    alt={ this.state.movie.title}/>
             </div>
         )
+        }
     }
-}
+    }
+
+
 
 export default MovieDisplay;
