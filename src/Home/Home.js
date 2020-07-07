@@ -1,5 +1,5 @@
-import React from 'react'
-import Movies from '../Movies/Movies'
+import React from 'react';
+import Movies from '../Movies/Movies';
 
 function Home(props) {
     if (props.error) {
@@ -9,11 +9,10 @@ function Home(props) {
     } else {
         return (
         <div className="App">
-   
-        <section className='movie-card-section'>
-            <Movies movies={props.allMovies}
-            showMoviePage={props.showMoviePage}/>
-        </section>
+            <section className='movie-card-section'>
+                <Movies movies={props.allMovies}
+                showMoviePage={props.showMoviePage}/>
+            </section>
         </div>
         )
     }

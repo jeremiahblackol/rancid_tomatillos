@@ -2,11 +2,9 @@ import React from 'react';
 import './movies.css'
 import MovieDisplay from '../MovieDisplay/MovieDisplay'
 import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 class Movies extends React.Component {
-    constructor() {
-        super()
-    }
 
     showPage = (event) => {
         console.log(event.target.parentNode.id)
@@ -37,6 +35,10 @@ class Movies extends React.Component {
         })
     )
     }
+}
+
+Movies.propTypes = {
+    movies: PropTypes.array,
 }
 
 export default Movies;

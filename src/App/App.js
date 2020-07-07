@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import { getAllMovies } from '../apiCalls';
 import Header from '../Header/Header';
 import LoginForm from '../LoginForm/LoginForm';
 import Home from '../Home/Home';
@@ -26,8 +27,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    fetch('https://rancid-tomatillos.herokuapp.com/api/v2/movies')
-      .then(response => response.json())
+    getAllMovies()
       .then(
         (data) => {
           this.setState({
@@ -42,6 +42,7 @@ class App extends React.Component {
           })
         }
       )
+      .catch(error => console.error(error))
   }
 
   handleSubmit = (info) => {
@@ -88,8 +89,6 @@ class App extends React.Component {
 
     
     // figure out how to render movie display, it recognizes it but it will not render it.
-    console.log(routerProps)
-
     return (foundMovie ? <MovieDisplay movie={foundMovie}/> : null)
   }
 

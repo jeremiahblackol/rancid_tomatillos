@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@testing-library/user-event": "^7.2.1",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
@@ -12,7 +13,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -31,7 +32,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.10.4",
+    "@sheerun/mutationobserver-shim": "^0.3.3",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0"
+    "@testing-library/react": "^9.5.0",
+    "jest-environment-jsdom-sixteen": "^1.0.3"
   }
 }
