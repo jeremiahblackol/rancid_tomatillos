@@ -1,5 +1,6 @@
 import React from 'react';
 import './movieDisplay.css';
+import { getMovieData } from '../apiCalls';
 
 // import {
 //     BrowserRouter as Router,
@@ -26,13 +27,7 @@ class MovieDisplay extends React.Component {
     //error handling for bad requests
 
     componentDidMount() {
-        Promise.all([
-            fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/movies/${this.props.movie.id}`)
-            .then(response => response.json()),
-            fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/movies/${this.props.movie.id}/videos`)
-            .then(response => response.json())
-
-        ])
+        Promise.all(getMovieData(this.props))
         .then(
             (data) => {this.movieAndVideoState(data)
             },
@@ -65,7 +60,7 @@ class MovieDisplay extends React.Component {
         return (
             <div>
                 <header className='movie-display-header'>
-                <h2>
+                <h2 className='movie-display-title'>
                 { this.state.movie.title }
                 </h2>
                 <img 

@@ -1,20 +1,17 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import Home from '../Home/Home';
 import LoginForm from '../LoginForm/LoginForm';
-import Movies from '../Movies/Movies';
 import { getAllMovies } from '../apiCalls';
 
-import { render, fireEvent, waitForElement } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { BrowserRouter } from 'react-router-dom';
-import MutationObserver from '@sheerun/mutationobserver-shim';
-window.MutationObserver = MutationObserver;
 jest.mock('../apiCalls');
 
-
 describe('App', () => {
-  getAllMovies.mockResolvedValue([
-    {
+
+  getAllMovies.mockResolvedValue({ movies: [{
     "id": 475430,
     "poster_path": "https://image.tmdb.org/t/p/original//tI8ocADh22GtQFV28vGHaBZVb0U.jpg",
     "backdrop_path": "https://image.tmdb.org/t/p/original//o0F8xAt8YuEm5mEZviX5pEFC12y.jpg",
@@ -29,23 +26,21 @@ describe('App', () => {
     "title": "Bloodshot",
     "average_rating": 9.5,
     "release_date": "2020-03-05"
-  }]);
+  }]});
 
-  getAllMovies.mockRejectedValue("THIS IS THE REJECTED VALUE");
-
-  it('should render correctly', () => {
+  it('should render correctly', async () => {
     const { getByText } = render(
     <BrowserRouter>
       <App />
     </BrowserRouter>);
 
-    const loginLink = getByText('Login');
+    const loginLink = await waitFor(() => getByText('Login'));
     
     expect(loginLink).toBeInTheDocument();
 
   });
 
-  it('should be able to go to login page', () => {
+  it('should be able to go to login page', async () => {
     const { getByText } = render( 
     <BrowserRouter>
       <App />
@@ -54,25 +49,27 @@ describe('App', () => {
       <LoginForm />
     </BrowserRouter>);
 
-    const logIn = getByText('Login');
-    const emailInput = getByPlaceholderText('email');
+    const logIn = await waitFor(() => getByText('Login'));
+    const emailInput = await waitFor(() => getByPlaceholderText('email'));
     
-    fireEvent.select(logIn); 
+    fireEvent.select(logIn);  
 
     expect(emailInput).toBeInTheDocument();
   });
 
   it('should fetch all movies on load', async () => {
+
     const { getByText } = render(
       <BrowserRouter>
-        <App />
+        <App /> 
       </BrowserRouter>  );
 
-    const container = getByText('Rancid Tomatillos');
+    const container = await waitFor(() => getByText('Rancid Tomatillos'));
     expect(container).toBeInTheDocument();
 
-    const movieOne = await waitForElement(() => getByText('Artemis Fowl')); 
+    const movieOne = await waitFor(() => getByText('Artemis Fowl')); 
     expect(movieOne).toBeInTheDocument();
+    
   });
 
 });

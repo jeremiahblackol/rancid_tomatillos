@@ -5,6 +5,12 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 class Movies extends React.Component {
+    constructor() {
+        super()
+        this.state ={
+            key: 0,
+        }
+    }
 
     showPage = (event) => {
         console.log(event.target.parentNode.id)
@@ -15,10 +21,10 @@ class Movies extends React.Component {
     return (
         this.props.movies.map(movie => {
             return (
-                <NavLink to={`/movies/${movie.id}`}>
+                <NavLink to={`/movies/${movie.id}`} key={movie.id}>
                 <article 
                     className='movie-card' 
-                    key={movie.id * 2} 
+                     
                     id={movie.id}
                     onClick={this.showPage}
                 >

@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { getAllMovies } from '../apiCalls';
+import { getAllMovies, attemptLogIn, fetchUserRatings } from './../apiCalls';
 import Header from '../Header/Header';
 import LoginForm from '../LoginForm/LoginForm';
 import Home from '../Home/Home';
@@ -26,56 +26,44 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() { 
     getAllMovies()
-      .then(
+    .then(  
         (data) => {
           this.setState({
-        isLoaded: true, 
-        allMovies: data.movies 
-          });
+            isLoaded: true, 
+            allMovies: data.movies 
+          }); 
         },
         (error) => {
+          console.error(error)
           this.setState({
             isLoaded: true,
-            error,
+            error: error,
           })
         }
       )
-      .catch(error => console.error(error))
   }
 
-  handleSubmit = (info) => {
-    fetch('https://rancid-tomatillos.herokuapp.com/api/v2/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/JSON'
-      },
-      body: JSON.stringify({
-        email: info.email,
-        password: info.password
-      }),
-    })
-      .then(response => response.json())
+  handleSubmit = async (info) => {
+    await attemptLogIn(info)
       .then(
         (data) => {
           this.getUserRatings(data.user)
         },
         (error) => {
             alert('Email or password is incorrect, please try again.')
-        });
-      
+        });  
   }
 
-  getUserRatings = (info) => {
+  getUserRatings = async (info) => {
     if (info) {
       this.setState({ 
         userInfo: info,
         loggedIn: true 
       })
     
-    fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/users/${info.id}/ratings`)
-      .then(response => response.json())
+    fetchUserRatings(info)
       .then(data =>   this.setState(prevState => {
         prevState.userInfo.ratings = data.ratings 
     }))
@@ -93,33 +81,34 @@ class App extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-    
-      <main>
-      <Header userInfo={this.state.userInfo} />
-      <Switch>
-      <Route exact path="/">
-       <Home error={ this.state.error } 
-        isLoaded={ this.state.isLoaded }
-        allMovies={ this.state.allMovies } 
-        // showMoviePage={ this.showMoviePage }
-        />
-      </Route>
-      <Route path="/login">
-       <LoginForm 
-         handleSubmit={this.handleSubmit}
-         loggedIn={this.state.loggedIn}
-       />
-     </Route>
-     <Route path={'/movies/:id'}render={ routerProps => this.showMoviePage(routerProps)} />
-    </Switch>
+      if (!this.state.isLoaded) {
+        return <p>Loading...</p>
+      } else if (this.state.error) {
+        return <h2>{this.state.error.message}</h2>
+      } else {
+        return (
+          <div>
+            <main>
+            <Header userInfo={this.state.userInfo} />
+            <Switch>
+            <Route exact path="/">
+            <Home 
+              allMovies={ this.state.allMovies } 
+              />
+            </Route>
+            <Route path="/login">
+            <LoginForm 
+              handleSubmit={this.handleSubmit}
+              loggedIn={this.state.loggedIn}
+            />
+          </Route>
+          <Route path={'/movies/:id'}render={ routerProps => this.showMoviePage(routerProps)} />
+          </Switch>
       </main>
-  
    </div>
-     );
-    }
-   }
-// }
+        )
+      }
+  }
+}
 
 export default App;
