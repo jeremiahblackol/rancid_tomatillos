@@ -42,6 +42,7 @@ class MovieDisplay extends React.Component {
 
      movieAndVideoState = (info) => {
          if (info) {
+             console.log(info)
              this.setState({
                  movie: info[0].movie,
                  video: info[1].videos,
