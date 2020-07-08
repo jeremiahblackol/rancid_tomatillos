@@ -1,0 +1,42 @@
+.movie-display-header {
+    text-align: center;
+}
+
+.backdrop {
+    width: 100%;
+}
+
+.movie-display-title {
+    position: absolute;
+    z-index: 1;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.50);
+    top: 125px;
+    left: 0;
+    right: 0;
+}
+
+.tagline {
+    position: absolute;
+    z-index: 1;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.50);
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.movie-display-body {
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 5px;
+}
+
+.poster-section {
+    display: flex;
+    padding: 5px;
+}
+
+.inside {
+    padding: 5px;
+}
