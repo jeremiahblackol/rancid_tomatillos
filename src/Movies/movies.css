@@ -1,12 +1,32 @@
-article {
-    height: 350px;
-    width: 150px;
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap');
+
+
+.movie-card {
+    height: 375px;
+    width: 175px;
     padding: 5px;
-    margin: 5px;
-    border: 1px solid black;
+    margin: 10px;
+    box-shadow: -2px 2px #dd694c;
+    background-color: honeydew;
+    border-radius: 3px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    font-family: 'Libre Franklin', sans-serif;
+    color: black;
 }
 
-img {
+.movie-card-nav {
+    text-decoration: none;
+}
+
+.movie-card-title {
+    font-weight: bold;
+}
+
+.movie-card-poster {
     width: 150px;
     height: auto;
+    border: 5px solid black;
+    border-radius: 2px;
 }

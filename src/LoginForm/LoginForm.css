@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap');
+
+.login {
+    padding: 10px;
+    margin: 0 auto;
+    text-align: center;
+    border: 3px solid #DB5F40;
+    width: max-content;
+    margin-top: 50px;
+    font-family: 'Libre Franklin', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.form-input {
+    font-family: 'Libre Franklin', sans-serif;
+    font-size: 20px;
+    margin: 5px;
+}
+
+.enter {
+    font-family: 'Libre Franklin', sans-serif;
+    font-size: 20px;
+    margin: 5px;
+}

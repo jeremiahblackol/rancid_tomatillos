@@ -1,4 +1,5 @@
 import React from 'react';
+import './LoginForm.css';
 import {
     BrowserRouter as Router,
     Redirect
@@ -37,7 +38,7 @@ class LoginForm extends React.Component {
             return <Redirect to='/' />
         } else {
         return (
-            <form className= 'login'>
+            <form className= 'login'> Log In:
                 <input 
                     type= 'text' 
                     name= 'email' 

@@ -77,7 +77,9 @@ class MovieDisplay extends React.Component {
                     <div className='poster-section'>
                         <img
                             src={ this.state.movie.poster_path }
-                            alt={ this.state.movie.title }/>
+                            alt={ this.state.movie.title }
+                            className='movie-display-poster'    
+                        />
                         <div className='inside'>
                         <h3>{ this.state.movie.title }</h3>
                         <p>Average Rating: { Math.round(this.state.movie.average_rating) }</p>
