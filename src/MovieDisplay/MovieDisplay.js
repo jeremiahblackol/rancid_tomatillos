@@ -12,8 +12,8 @@ class MovieDisplay extends React.Component {
             video: null,
             isLoaded: false,
             error: null,
-            loggedIn: this.props.loggedIn
-
+            loggedIn: this.props.loggedIn,
+            rating: this.props.movieRating
         }
     }
 
@@ -35,7 +35,6 @@ class MovieDisplay extends React.Component {
 
      movieAndVideoState = (info) => {
          if (info) {
-             console.log(info)
              this.setState({
                  movie: info[0].movie,
                  video: info[1].videos,
@@ -45,7 +44,7 @@ class MovieDisplay extends React.Component {
      }
 
      updateRating = (event) => {
-        console.log(this.state)
+        console.log(this.state.rating)
         event.preventDefault()
         this.setState({ userRating: event.target.value });
     }
@@ -94,7 +93,7 @@ class MovieDisplay extends React.Component {
                         {this.state.loggedIn ? 
                         <form onSubmit={this.submitUserRating}>
                             <p>Current Rating: 
-                                { this.props.rating ? this.props.rating.rating : 'Add a rating!' }
+                                { this.state.rating ? this.state.rating.rating : 'Add a rating!' }
                             </p>
                         <select onChange={this.updateRating}> 
                             <option value="1" id="1">1</option>

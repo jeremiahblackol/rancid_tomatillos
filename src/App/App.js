@@ -64,7 +64,7 @@ class App extends React.Component {
       })
     
     fetchUserRatings(info)
-      .then(data =>   this.setState(prevState => {
+      .then(data => this.setState(prevState => {
         prevState.userInfo.ratings = data.ratings 
     }))
     }
@@ -73,14 +73,15 @@ class App extends React.Component {
   showMoviePage = (routerProps) => {
     let movieID = parseInt(routerProps.match.params.id)
     let foundMovie = this.state.allMovies.find(movie => movie.id === movieID)
+
     console.log(this.state.userInfo.ratings)
     let foundRating;
     if (this.state.userInfo.ratings) {
-       foundRating = this.state.userInfo.ratings.find((rating) => foundMovie.id === rating.id )
+      console.log(foundRating)
+       foundRating = this.state.userInfo.ratings.find((rating) => foundMovie.id === rating.movie_id )
     } else {
       foundRating = null
     }
-    // this.setState({ currentMovie: foundMovie})
 
     
     // figure out how to render movie display, it recognizes it but it will not render it.
