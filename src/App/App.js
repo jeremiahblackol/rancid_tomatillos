@@ -64,7 +64,7 @@ class App extends React.Component {
       })
     
     fetchUserRatings(info)
-      .then(data =>   this.setState(prevState => {
+      .then(data => this.setState(prevState => {
         prevState.userInfo.ratings = data.ratings 
     }))
     }
@@ -73,12 +73,38 @@ class App extends React.Component {
   showMoviePage = (routerProps) => {
     let movieID = parseInt(routerProps.match.params.id)
     let foundMovie = this.state.allMovies.find(movie => movie.id === movieID)
-    // this.setState({ currentMovie: foundMovie})
+
+    console.log(this.state.userInfo.ratings)
+    let foundRating;
+    if (this.state.userInfo.ratings) {
+      console.log(foundRating)
+       foundRating = this.state.userInfo.ratings.find((rating) => foundMovie.id === rating.movie_id )
+    } else {
+      foundRating = null
+    }
 
     
     // figure out how to render movie display, it recognizes it but it will not render it.
-    return (foundMovie ? <MovieDisplay movie={foundMovie}/> : null)
+    return (foundMovie ? <MovieDisplay postUserRating={ this.postUserRating } movieRating={foundRating} loggedIn={this.state.loggedIn} movie={foundMovie}/> : null)
   }
+
+  postUserRating = (movieID, rating) => {
+    console.log('post info', movieID, rating)
+    fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/users/${this.state.userInfo.id}/ratings`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/JSON'
+      },
+      body: JSON.stringify({ 
+        movie_id: movieID, 
+        rating: Number(rating)
+      })
+    })
+    .then(response => response.json())
+  }
+
+  //here we want to find the user rating associated with a particular movie
+
 
   render() {
       if (!this.state.isLoaded) {

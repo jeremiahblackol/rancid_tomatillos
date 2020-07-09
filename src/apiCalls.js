@@ -12,7 +12,7 @@ export const attemptLogIn = (info) => {
       body: JSON.stringify({
         email: info.email,
         password: info.password
-      }),
+      })
     })
       .then(response => response.json())
 }

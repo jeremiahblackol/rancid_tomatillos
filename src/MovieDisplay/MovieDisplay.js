@@ -2,29 +2,22 @@ import React from 'react';
 import './movieDisplay.css';
 import { getMovieData } from '../apiCalls';
 
-// import {
-//     BrowserRouter as Router,
-//     Switch,
-//     Route,
-//     Redirect
-//   } from "react-router-dom";
 
 
 class MovieDisplay extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             movie: null,
             video: null,
             isLoaded: false,
-            error: null
+            error: null,
+            loggedIn: this.props.loggedIn,
+            rating: this.props.movieRating
         }
     }
 
-    //need to be able to fetch a single movie
-    //fetch a single movie's videos
-    //creating movie display component
-    //error handling for bad requests
+
 
     componentDidMount() {
         Promise.all(getMovieData(this.props))
@@ -42,7 +35,6 @@ class MovieDisplay extends React.Component {
 
      movieAndVideoState = (info) => {
          if (info) {
-             console.log(info)
              this.setState({
                  movie: info[0].movie,
                  video: info[1].videos,
@@ -50,6 +42,17 @@ class MovieDisplay extends React.Component {
              })
          }
      }
+
+     updateRating = (event) => {
+        console.log(this.state.rating)
+        event.preventDefault()
+        this.setState({ userRating: event.target.value });
+    }
+
+    submitUserRating = (event) => {
+        event.preventDefault()
+        this.props.postUserRating(this.state.movie.id, this.state.userRating) 
+    }
 
     render() {
         if (this.state.error) {
@@ -87,7 +90,25 @@ class MovieDisplay extends React.Component {
                     <p>Budget: { `$${this.state.movie.budget}` }</p>
                     <p>Revenue: { `$${this.state.movie.revenue}` }</p>
                     <p>Runtime: { this.state.movie.runtime }</p>
-                    {/* <a>{this.state.video.type}</a> */}
+                        {this.state.loggedIn ? 
+                        <form onSubmit={this.submitUserRating}>
+                            <p>Current Rating: 
+                                { this.state.rating ? this.state.rating.rating : 'Add a rating!' }
+                            </p>
+                        <select onChange={this.updateRating}> 
+                            <option value="1" id="1">1</option>
+                            <option value="2" id="2">2</option>
+                            <option value="3" id="3">3</option>
+                            <option value="4" id="4">4</option>
+                            <option value="5" id="5">5</option>
+                            <option value="6" id="6">6</option>
+                            <option value="7" id="7">7</option>
+                            <option value="8" id="8">8</option>
+                            <option value="9" id="9">9</option>
+                            <option value="10" id="10">10</option>
+                        </select>
+                        <button type="submit">Submit rating</button>
+                    </form> : null}
                 </section>
             </div>
         )
