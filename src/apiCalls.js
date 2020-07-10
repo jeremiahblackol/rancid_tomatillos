@@ -17,8 +17,8 @@ export const attemptLogIn = (info) => {
       .then(response => response.json())
 }
 
-export const fetchUserRatings = (info) => {
-    return fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/users/${info.id}/ratings`)
+export const fetchUserRatings = (id) => {
+    return fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/users/${id}/ratings`)
       .then(response => response.json())
 }
 

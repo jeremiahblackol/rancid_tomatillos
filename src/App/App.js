@@ -63,7 +63,7 @@ class App extends React.Component {
         loggedIn: true 
       })
     
-    fetchUserRatings(info)
+    fetchUserRatings(info.id)
       .then(data => this.setState(prevState => {
         prevState.userInfo.ratings = data.ratings 
     }))
@@ -73,23 +73,19 @@ class App extends React.Component {
   showMoviePage = (routerProps) => {
     let movieID = parseInt(routerProps.match.params.id)
     let foundMovie = this.state.allMovies.find(movie => movie.id === movieID)
-
-    console.log(this.state.userInfo.ratings)
     let foundRating;
     if (this.state.userInfo.ratings) {
-      console.log(foundRating)
        foundRating = this.state.userInfo.ratings.find((rating) => foundMovie.id === rating.movie_id )
     } else {
       foundRating = null
     }
-
-    
-    // figure out how to render movie display, it recognizes it but it will not render it.
-    return (foundMovie ? <MovieDisplay postUserRating={ this.postUserRating } movieRating={foundRating} loggedIn={this.state.loggedIn} movie={foundMovie}/> : null)
+    return (foundMovie ? <MovieDisplay userID={this.state.userInfo.id} postUserRating={ this.postUserRating } movieRating={foundRating} loggedIn={this.state.loggedIn} movie={foundMovie}/> : null)
   }
 
-  postUserRating = (movieID, rating) => {
-    console.log('post info', movieID, rating)
+  postUserRating = (movieID, rating, prevRating) => {
+    if (prevRating && (prevRating.rating !== 'Add a rating!')) {
+      this.deleteRating(prevRating);
+    }
     fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/users/${this.state.userInfo.id}/ratings`, {
       method: 'POST',
       headers: {
@@ -101,10 +97,19 @@ class App extends React.Component {
       })
     })
     .then(response => response.json())
+    this.getUserRatings(this.state.userInfo)
+    // return <Redirect to={`/movies/${movieID}`} render={ routerProps => this.showMoviePage(routerProps)}/>
   }
 
-  //here we want to find the user rating associated with a particular movie
-
+  deleteRating = (prevRating) => {
+    console.log('delete!')
+    fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/users/${this.state.userInfo.id}/ratings/${prevRating.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/JSON'
+      }
+    })
+  }
 
   render() {
       if (!this.state.isLoaded) {
@@ -119,7 +124,7 @@ class App extends React.Component {
             <Switch>
             <Route exact path="/">
             <Home 
-              allMovies={ this.state.allMovies } 
+              allMovies={this.state.allMovies} 
               />
             </Route>
             <Route path="/login">
