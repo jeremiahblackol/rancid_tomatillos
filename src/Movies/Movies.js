@@ -21,7 +21,7 @@ class Movies extends React.Component {
     return (
         this.props.movies.map(movie => {
             return (
-                <NavLink to={`/movies/${movie.id}`} key={movie.id}>
+                <NavLink className='movie-card-nav' to={`/movies/${movie.id}`} key={movie.id}>
                 <article 
                     className='movie-card' 
                      
@@ -30,11 +30,12 @@ class Movies extends React.Component {
                 >
                     <img 
                         src={movie.poster_path} 
-                        alt={`${movie.title} poster`} 
+                        alt={`${movie.title} poster`}
+                        className='movie-card-poster' 
                         
                     />
-                    <h3>{movie.title}</h3>
-                    <p> Average rating: {Math.round(movie.average_rating)}</p>
+                    <h3 className='movie-card-title'>{movie.title}</h3>
+                    <p className='movie-card-text'> Average rating: {Math.round(movie.average_rating)}</p>
                 </article>
                 </NavLink>
             )

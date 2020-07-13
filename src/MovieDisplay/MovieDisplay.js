@@ -1,6 +1,6 @@
 import React from 'react';
 import './movieDisplay.css';
-import { getMovieData } from '../apiCalls';
+import { getMovieData, postNewRating, removeRating } from '../apiCalls';
 
 
 
@@ -8,19 +8,17 @@ class MovieDisplay extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            movie: null,
-            video: null,
             isLoaded: false,
             error: null,
             loggedIn: this.props.loggedIn,
-            rating: this.props.movieRating
+            ratingValue: '',
+            allRatings: this.props.ratings
         }
     }
 
-
-
     componentDidMount() {
-        Promise.all(getMovieData(this.props))
+        console.log(this.state.ratingValue);
+        Promise.all(getMovieData(this.props.movieID))
         .then(
             (data) => {this.movieAndVideoState(data)
             },
@@ -36,29 +34,74 @@ class MovieDisplay extends React.Component {
      movieAndVideoState = (info) => {
          if (info) {
              this.setState({
-                 movie: info[0].movie,
-                 video: info[1].videos,
-                   isLoaded: true,
+                movie: info[0].movie,
+                video: info[1].videos,
+                isLoaded: true,
              })
          }
      }
 
-     updateRating = (event) => {
-        console.log(this.state.rating)
+    postUserRating = (event, movieID, ratingvalue) => {
         event.preventDefault()
-        this.setState({ userRating: event.target.value });
+        postNewRating(this.props.userInfo.id, movieID, Number(ratingvalue))
+            .then(() => this.props.getUserRatings(this.props.userInfo))
+            .catch(err => console.error(err))
     }
 
-    submitUserRating = (event) => {
-        event.preventDefault()
-        this.props.postUserRating(this.state.movie.id, this.state.userRating) 
+    deleteRating = (event, ratingId) => {
+        event.preventDefault();
+        let ratingsDuplicate = [...this.props.ratings];
+        let newRatings = ratingsDuplicate.reduce((ratings, movie) => {
+            if (movie.movie_id !== this.props.movieID) {
+                ratings.push(movie)
+            }
+            return ratings;
+        }, [])
+        this.setState({...this.state, ratingValue: '', ratings: newRatings})
+        removeRating(this.props.userInfo.id, ratingId)
+            .then(() => this.props.getUserRatings(this.props.userInfo))
+            .catch(err => console.error(err))
+    }
+
+    handleChange = (event) => {
+        this.setState({ ratingValue: event.target.value });
+    }
+
+    showRatingForm = () => {
+        let foundRating = this.props.ratings.find(movie => movie.movie_id === this.state.movie.id)
+        if (!foundRating) {
+            return (            
+                <form onSubmit={(event) => this.postUserRating(event, this.props.movieID, this.state.ratingValue)}>
+                    <label>Add a rating:
+                        <input 
+                            type= 'number' 
+                            name= 'ratingValue' 
+                            className= 'rating-input' 
+                            min='1'
+                            max='10'
+                            onChange={this.handleChange}
+                            value= {this.state.ratingValue}>
+                        </input>
+                    </label>
+                    <button type='submit'>Submit rating</button>
+                </form>);
+        } else if (foundRating) {
+            return (            
+                <form onSubmit={(event) => this.deleteRating(event, foundRating.id, this.props.movieID)}>
+                    <p>Rating: {foundRating.rating}</p> 
+                    <button>Change Rating</button>
+                </form>
+        );
+        } else {
+            return null;
+        }
     }
 
     render() {
         if (this.state.error) {
             return <h1>ERROR: {this.state.error.message}</h1>
          } else if (!this.state.isLoaded) {
-            return <div>loading...</div>
+            return <div>Loading...</div>
          } else {
 
         return (
@@ -77,7 +120,9 @@ class MovieDisplay extends React.Component {
                     <div className='poster-section'>
                         <img
                             src={ this.state.movie.poster_path }
-                            alt={ this.state.movie.title }/>
+                            alt={ this.state.movie.title }
+                            className='movie-display-poster'    
+                        />
                         <div className='inside'>
                         <h3>{ this.state.movie.title }</h3>
                         <p>Average Rating: { Math.round(this.state.movie.average_rating) }</p>
@@ -86,36 +131,16 @@ class MovieDisplay extends React.Component {
                         </div>
                     </div>
                     <p>Genres:</p>
-                    <ul>{ this.state.movie.genres.map(genre => <li>{genre}</li>) }</ul>
+                    <ul>{ this.state.movie.genres.map(genre => <li key={genre.id}>{genre}</li>) }</ul>
                     <p>Budget: { `$${this.state.movie.budget}` }</p>
                     <p>Revenue: { `$${this.state.movie.revenue}` }</p>
-                    <p>Runtime: { this.state.movie.runtime }</p>
-                        {this.state.loggedIn ? 
-                        <form onSubmit={this.submitUserRating}>
-                            <p>Current Rating: 
-                                { this.state.rating ? this.state.rating.rating : 'Add a rating!' }
-                            </p>
-                        <select onChange={this.updateRating}> 
-                            <option value="1" id="1">1</option>
-                            <option value="2" id="2">2</option>
-                            <option value="3" id="3">3</option>
-                            <option value="4" id="4">4</option>
-                            <option value="5" id="5">5</option>
-                            <option value="6" id="6">6</option>
-                            <option value="7" id="7">7</option>
-                            <option value="8" id="8">8</option>
-                            <option value="9" id="9">9</option>
-                            <option value="10" id="10">10</option>
-                        </select>
-                        <button type="submit">Submit rating</button>
-                    </form> : null}
+                    <p>Runtime: { this.state.movie.runtime } minutes</p>
+                    {this.props.loggedIn ? this.showRatingForm() : null}
                 </section>
             </div>
         )
         }
     }
     }
-
-
 
 export default MovieDisplay;

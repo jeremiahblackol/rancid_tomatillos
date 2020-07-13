@@ -5,10 +5,8 @@ import Header from '../Header/Header';
 import LoginForm from '../LoginForm/LoginForm';
 import Home from '../Home/Home';
 import {
-  BrowserRouter as Router,
-  Switch,
+  BrowserRouter as Switch,
   Route,
-  Redirect
 } from "react-router-dom";
 
 import MovieDisplay from '../MovieDisplay/MovieDisplay';
@@ -22,11 +20,17 @@ class App extends React.Component {
       allMovies: [],
       userInfo: {},
       loggedIn: false,
-      currentMovie: {}
+      currentMovie: {},
+      ratings: [],
     }
   }
 
-  async componentDidMount() { 
+  componentDidMount() { 
+    console.log('app did mount')
+    this.getMovies()
+  }
+
+  getMovies = () => {
     getAllMovies()
     .then(  
         (data) => {
@@ -56,55 +60,58 @@ class App extends React.Component {
         });  
   }
 
-  getUserRatings = async (info) => {
+  getUserRatings = (info) => {
     if (info) {
       this.setState({ 
         userInfo: info,
         loggedIn: true 
       })
     
-    fetchUserRatings(info)
-      .then(data => this.setState(prevState => {
-        prevState.userInfo.ratings = data.ratings 
-    }))
+    fetchUserRatings(info.id)
+      .then(data => this.setState({ ratings: data.ratings }))
     }
   }
 
   showMoviePage = (routerProps) => {
-    let movieID = parseInt(routerProps.match.params.id)
-    let foundMovie = this.state.allMovies.find(movie => movie.id === movieID)
-
-    console.log(this.state.userInfo.ratings)
+    let movieID = parseInt(routerProps)
+    let foundMovie = this.state.allMovies.find(movie => parseInt(movie.id) === movieID)
     let foundRating;
-    if (this.state.userInfo.ratings) {
-      console.log(foundRating)
-       foundRating = this.state.userInfo.ratings.find((rating) => foundMovie.id === rating.movie_id )
+    if (this.state.ratings) {
+       foundRating = this.state.ratings.find((rating) => foundMovie.id === rating.movie_id)
     } else {
       foundRating = null
     }
-
-    
-    // figure out how to render movie display, it recognizes it but it will not render it.
-    return (foundMovie ? <MovieDisplay postUserRating={ this.postUserRating } movieRating={foundRating} loggedIn={this.state.loggedIn} movie={foundMovie}/> : null)
+    return (foundMovie ? 
+      <MovieDisplay 
+        userID={this.state.userInfo.id} 
+        postUserRating={this.postUserRating} 
+        movieRating={foundRating}
+        allRatings={this.state.ratings} 
+        loggedIn={this.state.loggedIn} 
+        movie={foundMovie}
+        deleteRating={this.deleteRating}
+        getUserRatings={this.getUserRatings}/>
+        : 
+        null)
   }
 
-  postUserRating = (movieID, rating) => {
-    console.log('post info', movieID, rating)
-    fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/users/${this.state.userInfo.id}/ratings`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/JSON'
-      },
-      body: JSON.stringify({ 
-        movie_id: movieID, 
-        rating: Number(rating)
-      })
-    })
-    .then(response => response.json())
+  // getUserRatings = (id) => {
+  //   fetchUserRatings(id)
+  //     .then(response => this.setState({ ratings: response.ratings }))
+  // }
+
+
+
+
+  deleteRating = async (ratingID, movieID) => {
+    // this.setState({ isLoaded: false })
+    // let deleted = await removeRating(this.state.userInfo, ratingID)
+    // let userRatings = await fetchUserRatings(this.state.userInfo.id)
+    // this.setState({ ...this.state, ratings: userRatings.ratings })
+    // console.log('userRatings', userRatings);
+    // console.log('after delete fetch', this.state.ratings)
+    // this.showMoviePage(movieID, userRatings)
   }
-
-  //here we want to find the user rating associated with a particular movie
-
 
   render() {
       if (!this.state.isLoaded) {
@@ -117,18 +124,31 @@ class App extends React.Component {
             <main>
             <Header userInfo={this.state.userInfo} />
             <Switch>
-            <Route exact path="/">
-            <Home 
-              allMovies={ this.state.allMovies } 
+              <Route exact path="/">
+              <Home 
+                allMovies={this.state.allMovies} 
+                />
+              </Route>
+              <Route path="/login">
+              <LoginForm 
+                handleSubmit={this.handleSubmit}
+                loggedIn={this.state.loggedIn}
               />
             </Route>
-            <Route path="/login">
-            <LoginForm 
-              handleSubmit={this.handleSubmit}
-              loggedIn={this.state.loggedIn}
+            <Route 
+              path={'/movies/:id'} 
+              render={ routerProps => {
+                const movieID = routerProps.match.params.id;
+                return <MovieDisplay 
+                  allMovies={this.state.allMovies}
+                  movieID={Number(movieID)}
+                  userInfo={this.state.userInfo}
+                  ratings={this.state.ratings}
+                  getUserRatings={this.getUserRatings}
+                  loggedIn={this.state.loggedIn}  
+                />
+              }}
             />
-          </Route>
-          <Route path={'/movies/:id'}render={ routerProps => this.showMoviePage(routerProps)} />
           </Switch>
       </main>
    </div>

@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Bowlby+One+SC&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap');
+
+
+.header {
+    background-color: #4b8538;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid #dd694c;
+}
+
+.header-title {
+    font-family: 'Bowlby One SC', sans-serif;
+    letter-spacing: .10em;
+    color: #A8D49A;
+    font-size: 50px;
+    margin-left: 20px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.header-list {
+    list-style-type: none;
+}
+
+.welcome-message {
+    font-family: 'Libre Franklin', sans-serif;
+    font-size: 30px;
+    color: #A8D49A;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; 
+}
+
+.login-link {
+    text-decoration: none;
+    font-family: 'Bowlby One SC', sans-serif;
+    letter-spacing: .10em;
+    font-size: 20px;
+    color: #A8D49A;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    padding: 2px;
+    border: 2px outset #dd694c;
+    border-radius: 5px;
+}
+
+.login-link:hover {
+    background-color: #dd694c;
+}
+
+.login-link:active {
+    border: 2px inset #A8D49A;
+}
