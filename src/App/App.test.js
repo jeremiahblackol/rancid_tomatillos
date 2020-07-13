@@ -62,7 +62,8 @@ describe('App', () => {
     const { getByText } = render(
       <BrowserRouter>
         <App /> 
-      </BrowserRouter>  );
+      </BrowserRouter>  
+      );
 
     const container = await waitFor(() => getByText('Rancid Tomatillos'));
     expect(container).toBeInTheDocument();

@@ -17,7 +17,6 @@ class MovieDisplay extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.state.ratingValue);
         Promise.all(getMovieData(this.props.movieID))
         .then(
             (data) => {this.movieAndVideoState(data)

@@ -26,7 +26,6 @@ class App extends React.Component {
   }
 
   componentDidMount() { 
-    console.log('app did mount')
     this.getMovies()
   }
 
@@ -93,24 +92,6 @@ class App extends React.Component {
         getUserRatings={this.getUserRatings}/>
         : 
         null)
-  }
-
-  // getUserRatings = (id) => {
-  //   fetchUserRatings(id)
-  //     .then(response => this.setState({ ratings: response.ratings }))
-  // }
-
-
-
-
-  deleteRating = async (ratingID, movieID) => {
-    // this.setState({ isLoaded: false })
-    // let deleted = await removeRating(this.state.userInfo, ratingID)
-    // let userRatings = await fetchUserRatings(this.state.userInfo.id)
-    // this.setState({ ...this.state, ratings: userRatings.ratings })
-    // console.log('userRatings', userRatings);
-    // console.log('after delete fetch', this.state.ratings)
-    // this.showMoviePage(movieID, userRatings)
   }
 
   render() {
