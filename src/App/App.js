@@ -1,14 +1,12 @@
 import React from 'react';
 import './App.css';
-import { getAllMovies, attemptLogIn, fetchUserRatings, postNewRating, removeRating } from './../apiCalls';
+import { getAllMovies, attemptLogIn, fetchUserRatings } from './../apiCalls';
 import Header from '../Header/Header';
 import LoginForm from '../LoginForm/LoginForm';
 import Home from '../Home/Home';
 import {
-  BrowserRouter as Router,
-  Switch,
+  BrowserRouter as Switch,
   Route,
-  Redirect
 } from "react-router-dom";
 
 import MovieDisplay from '../MovieDisplay/MovieDisplay';

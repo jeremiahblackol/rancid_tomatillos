@@ -1,8 +1,7 @@
 import React from 'react';
 import './LoginForm.css';
 import {
-    BrowserRouter as Router,
-    Redirect
+    BrowserRouter as Redirect
   } from "react-router-dom";
 
 

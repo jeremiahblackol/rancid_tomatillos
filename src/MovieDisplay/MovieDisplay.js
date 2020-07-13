@@ -1,6 +1,6 @@
 import React from 'react';
 import './movieDisplay.css';
-import { getMovieData, fetchUserRatings, postNewRating, removeRating } from '../apiCalls';
+import { getMovieData, postNewRating, removeRating } from '../apiCalls';
 
 
 
