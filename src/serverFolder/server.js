@@ -31,7 +31,16 @@ app.locals.comments = {
         }
 };
 
-app.locals.favorites = [{test2: 'favorites test'}];
+app.locals.favorites = {
+    userID: {
+        favoriteMovies: ["Cool Runnings", "The Bride of Chucky", "Ace Ventura 2"], 
+    },
+    secondUserID: {
+        favoriteMovies: ["The Godfather", "The Color Purple"]
+    }
+
+
+};
 
 app.listen(app.get('port'), () => {
     console.log(`App is running on port ${app.get('port')}`)
@@ -41,43 +50,62 @@ app.get('/' , (request, response) => {
     response.status(200).send(app.locals.comments)
 });
 
-const routeURL = "/api/v1/"
+app.get("/api/v1/comments/:id/:movieId", (request, response) => {
 
-//making this more dynamic so that we can access the app.locals.whatever for each request
-
-app.get(`${routeURL}:location/:id/:movieId`, (request, response) => {
     let user = request.params.id;
     let movie = request.params.movieId;
+    let dataset = app.locals.comments;
 
-    // this will set which dataset point we want to access whether we are GET favorites or comments
-    let location = request.params.location === "comments" ? app.locals.comments : app.locals.favorites;
+    if ( dataset[user] ) {
 
-
-    let userLocation = app.locals.comments[user];
-
-    if ( userLocation ) {
-        return userLocation.commentedMovies[movie] ? 
-            response.status(200).json(userLocation.commentedMovies[movie]):
-            response.status(404).send("Sorry, you don't have any comments for this movie.")
+        if ( dataset[user].commentedMovies ) {
+            return dataset[user].commentedMovies[movie] ? 
+                response.status(200).json(dataset[user].commentedMovies[movie]):
+                response.status(404).send("Sorry, you don't have any comments for this movie.")
+    
+        } else {
+            response.status(404).send("Sorry, you have not commented on any movies.")
+        }
     } else {
-        response.status(404).send("Sorry, you have not made any comments yet.")
-    }     
+        response.status(404).send("Sorry, we could not find any data.")
+    }
 });
 
-app.post('/api/v1/comments/:id/:movieId', (request, response) => {
+app.get("/api/v1/favorites/:id", (request, response) => {
+    let user = request.params.id;
+    let dataset = app.locals.favorites;
 
-
-    // let user = request.params.id;
-    // let movie = request.params.movieId;
-
-    // let userLocation = app.locals.comments[user];
-
-    // if ( userLocation ) {
-    //     return userLocation.commentedMovies[movie] ? 
-    //         response.status(200).json(userLocation.commentedMovies[movie]):
-    //         response.status(404).send("Sorry, you don't have any comments for this movie.")
-    // } else {
-    //     response.status(404).send("Sorry, you have not made any comments yet.")
-    // }     
+    if ( dataset[user] ) {
+        return dataset[user].favoriteMovies ? 
+            response.status(200).json(dataset[user].favoriteMovies):
+            response.status(404).send("Sorry, you don't have any favorite movies.")
+    } else {
+        response.status(404).send("Sorry, we could not find any data.")
+    }
 });
 
+// in the process of creating a for..of loop for updating comments// i suppose it doesnt need it.
+
+app.post("/api/v1/comments/:id/:movieId", (request, response) => {
+    let user = request.params.id;
+    let movie = request.params.movieId;
+    let dataset = app.locals.comments;
+    const { comment, name } = request.body;
+
+    for (let requiredParameter of ['comment', 'name']) {
+        response.status(422).send(`Missing ${requiredParameter}!`)
+    }
+
+    // if (!comment) {
+    //     response.status(422).send("Missing comment!")
+    // }
+
+    // if (!name) {
+    //     response.status(422).send("Missing namme!")
+    // }
+});
+
+
+
+
+ 
