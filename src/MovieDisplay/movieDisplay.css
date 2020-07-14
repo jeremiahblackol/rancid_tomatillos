@@ -4,12 +4,16 @@
 
 .movie-display-header {
     text-align: center;
+    display: flex;
 }
 
 .backdrop {
     width: 100%;
     border-top: 8px solid black;
     border-bottom: 8px solid black;
+    position: absolute;
+    bottom: 0;
+    z-index: -1;
 }
 
 .movie-display-title {
@@ -17,7 +21,6 @@
     font-size: 50px;
     letter-spacing: .10em;
     padding: 20px 10px;
-    width: max-content;
     position: absolute;
     z-index: 1;
     color: white;
@@ -40,9 +43,20 @@
 }
 
 .movie-display-body {
+    background-color: #A8D49A;
+    position: sticky;
+    z-index: 100;
     display: flex;
     flex-flow: column nowrap;
+    height: max-content;
+    overflow: scroll;
+    width: 65%;
+    height: 75vh;
+    margin-left: 20%;
+    border: 2px solid black;    
     padding: 5px;
+    box-shadow: -2px 2px #dd694c;
+
 }
 
 .poster-section {
@@ -56,4 +70,10 @@
 
 .movie-display-poster {
     height: 300px;
+    border: 3px solid black;
+    border-radius: 2px;
+}
+
+.extra-movie-info {
+    padding: 10px;
 }

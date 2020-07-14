@@ -66,6 +66,10 @@ class MovieDisplay extends React.Component {
         this.setState({ ratingValue: event.target.value });
     }
 
+    toggleFavorite = () => {
+
+    }
+
     showRatingForm = () => {
         let foundRating = this.props.ratings.find(movie => movie.movie_id === this.state.movie.id)
         if (!foundRating) {
@@ -96,6 +100,22 @@ class MovieDisplay extends React.Component {
         }
     }
 
+    showFavorite = () => {
+        return this.props.isFavorite ?
+        <img 
+            src={require('../images/tomatillo-yes.png')} 
+            alt={'favorite'} 
+            className='tomatillo-fave'
+            onClick={this.toggleFavorite}
+        /> :
+        <img 
+            src={require('../images/tomatillo-no.png')} 
+            alt={'not favorite'} 
+            className='tomatillo-fave'
+            onClick={this.toggleFavorite}
+        />
+    }
+
     render() {
         if (this.state.error) {
             return <h1>ERROR: {this.state.error.message}</h1>
@@ -105,38 +125,43 @@ class MovieDisplay extends React.Component {
 
         return (
             <div>
-                <header className='movie-display-header'>
-                <h2 className='movie-display-title'>
-                { this.state.movie.title }
-                </h2>
-                <img 
-                    className='backdrop'
-                    src={ this.state.movie.backdrop_path }
-                    alt={ this.state.movie.title}/>
-                <p className='tagline'>{this.state.movie.tagline}</p>
-                </header>
-                <section className='movie-display-body'>
-                    <div className='poster-section'>
-                        <img
-                            src={ this.state.movie.poster_path }
-                            alt={ this.state.movie.title }
-                            className='movie-display-poster'    
-                        />
-                        <div className='inside'>
-                        <h3>{ this.state.movie.title }</h3>
-                        <p>Average Rating: { Math.round(this.state.movie.average_rating) }</p>
-                        <p>Released: { this.state.movie.release_date }</p>
-                        <p>{ this.state.movie.overview }</p>
-                        </div>
+            <section className='movie-display-body'>
+                <div className='poster-section'>
+                    <img
+                        src={ this.state.movie.poster_path }
+                        alt={ this.state.movie.title }
+                        className='movie-display-poster'    
+                    />
+                    <div className='inside'>
+                    <h3>{ this.state.movie.title }</h3>
+                    <p>Average Rating: { Math.round(this.state.movie.average_rating) }</p>
+                    <p>Released: { this.state.movie.release_date }</p>
+                    <p>{ this.state.movie.overview }</p>
+                    {this.showFavorite()}
+                    {this.props.loggedIn ? this.showRatingForm() : null}
+
+                    {/* {this.props.loggedIn ? this.showFavorite() : null} */}
                     </div>
+                </div>
+                <div className='extra-movie-info'>
+                    <p>Runtime: { this.state.movie.runtime } minutes</p>
                     <p>Genres:</p>
                     <ul>{ this.state.movie.genres.map(genre => <li key={genre.id}>{genre}</li>) }</ul>
                     <p>Budget: { `$${this.state.movie.budget}` }</p>
                     <p>Revenue: { `$${this.state.movie.revenue}` }</p>
-                    <p>Runtime: { this.state.movie.runtime } minutes</p>
-                    {this.props.loggedIn ? this.showRatingForm() : null}
-                </section>
-            </div>
+                </div>
+            </section>
+            <header className='movie-display-header'>
+            {/* <h2 className='movie-display-title'>
+            { this.state.movie.title }
+            </h2> */}
+            <img 
+                className='backdrop'
+                src={ this.state.movie.backdrop_path }
+                alt={ this.state.movie.title}/>
+            {/* <p className='tagline'>{this.state.movie.tagline}</p> */}
+            </header>
+        </div>
         )
         }
     }

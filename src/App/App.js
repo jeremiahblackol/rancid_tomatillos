@@ -60,6 +60,7 @@ class App extends React.Component {
   }
 
   getUserRatings = (info) => {
+    console.log(info);
     if (info) {
       this.setState({ 
         userInfo: info,

@@ -2,7 +2,7 @@
 
 
 .movie-card {
-    height: 375px;
+    height: 390px;
     width: 175px;
     padding: 5px;
     margin: 10px;
@@ -29,4 +29,10 @@
     height: auto;
     border: 5px solid black;
     border-radius: 2px;
+}
+
+.tomatillo-fave {
+    width: 20px;
+    height: auto;
+    margin: 5px;
 }
