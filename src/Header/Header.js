@@ -16,7 +16,11 @@ function Header(props) {
            <ul className='header-list'>
              {!props.userInfo.id ? 
              <li><a className='login-link' href="/login">Login</a></li> : 
-             <li><a className='login-link' href="/">Logout</a></li>}
+             <>
+             <a className='login-link' href="/favorites">Favorites</a>
+             <a className='login-link' href="/">Logout</a>
+             </>
+             }
            </ul>
          </nav>
          </Router>
