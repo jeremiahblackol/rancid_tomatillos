@@ -2,10 +2,14 @@ import React from 'react';
 import './Header.css';
 import {
     BrowserRouter as Router,
+    Redirect,
+    NavLink
   } from "react-router-dom";
+  import { createBrowserHistory } from 'history';
 
 function Header(props) {
-    return ( 
+
+  return ( 
     <div className='header'>    
     <h1 className='header-title'>Rancid Tomatillos</h1>
       {props.userInfo.name ? 
@@ -17,7 +21,7 @@ function Header(props) {
              {!props.userInfo.id ? 
              <li><a className='login-link' href="/login">Login</a></li> : 
              <>
-             <a className='login-link' href="/favorites">Favorites</a>
+             <NavLink className='login-link' to={'/favorites'}>Favorites</NavLink>
              <a className='login-link' href="/">Logout</a>
              </>
              }
@@ -25,7 +29,7 @@ function Header(props) {
          </nav>
          </Router>
     </div>
-    )
+  )
 }
 
 export default Header;

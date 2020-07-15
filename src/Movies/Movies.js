@@ -2,35 +2,62 @@ import React from 'react';
 import './movies.css'
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { fetchFavorites } from '../apiCalls';
+import { fetchFavorites, deleteFavorite, addFavorite } from '../apiCalls';
 
 class Movies extends React.Component {
-    
-    componentDidMount() {
-        fetchFavorites();
-            .then()
+    constructor() {
+        super()
+        this.state = {
+            faves: [],
+        }
     }
     
-    toggleFavorite = () => {
+    componentDidMount() {
+        this.getFaves();
+    }
+    
+    toggleFavorite = (event, movie) => {
+        let data = event.target.dataset;
+        console.log('movie', movie);
+        if (data.fave) {
+            this.removeFave(Number(data.id))
+        } else if (!data.fave) {
+            this.addFave(Number(data.id), movie)
+        }
+    }
+    
+    getFaves = () => {
+        fetchFavorites()
+            .then(data => this.setState({ faves: data }))
+            .catch(err => console.error(err))
+    }
 
+    removeFave = (id) => {
+        deleteFavorite(id)
+            .then(() => this.getFaves())
+            .catch(err => console.error(err))
+    }
+
+    addFave = (id, movie) => {
+        addFavorite(id, movie)
+            .then(() => this.getFaves())
+            .catch(err => console.error(err))
     }
 
     render() {
+        console.log('movie faves', this.state.faves);
         return (
             this.props.movies.map(movie => {
-                let isFavorite;
-                if (this.props.loggedIn) {
-                    isFavorite = this.props.favorites.find(fave => fave.id === movie.id)
-                    console.log('fave?', isFavorite);
-                }
+                let isFavorite = this.state.faves.find(fave => fave.id === movie.id);
                 return (
                     <div className='movie-container'>
                     <img 
-                            src={isFavorite ? require('../images/tomatillo-yes.png') : require('../images/tomatillo-no.png')} 
-                            alt={isFavorite ? 'favorite' : 'not favorite'} 
-                            className='tomatillo-fave-main'
-                            onClick={this.toggleFavorite}
-                            data-id={movie.id}
+                        src={isFavorite ? require('../images/tomatillo-yes.png') : require('../images/tomatillo-no.png')} 
+                        alt={isFavorite ? 'favorite' : 'not favorite'} 
+                        className='tomatillo-fave-main'
+                        onClick={(event) => this.toggleFavorite(event, movie)}
+                        data-id={movie.id}
+                        data-fave={isFavorite}
                     />
                     <NavLink className='movie-card-nav' to={`/movies/${movie.id}`} key={movie.id}>
                     <article 

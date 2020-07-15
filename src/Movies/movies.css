@@ -34,6 +34,7 @@
 .movie-container {
     display: flex;
     flex-flow: column nowrap;
+    width: max-content;
 }
 
 .tomatillo-fave-main {

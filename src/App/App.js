@@ -68,7 +68,7 @@ class App extends React.Component {
         loggedIn: true 
       })
     
-    Promise.all(fetchUserRatings(info.id))
+    fetchUserRatings(info.id)
       .then(data => this.setState({ 
         ratings: data.ratings
       }))
@@ -138,13 +138,11 @@ class App extends React.Component {
                 />
               }}
             />
-            <Route 
-              path={'/favorites'} 
-              render={() => <Favorites
-                loggedIn={this.state.loggedIn} 
-                favorites={this.state.favorites}
-              />}
-            />
+            <Route path={'/favorites'}>
+              <Favorites
+                loggedIn={this.state.loggedIn}
+              />
+            </Route>
           </Switch>
       </main>
    </div>
