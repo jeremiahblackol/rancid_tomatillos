@@ -50,3 +50,15 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+.tomatillo-fave-main {
+  background-color: honeydew;
+  height: 30px;
+  width: 25px;
+  padding: 10px;
+  margin-bottom: -15px;
+  margin-top: 10px;
+  border-radius: 5px;
+  box-shadow: -2px 0px #dd694c;
+  z-index: 0;
+}

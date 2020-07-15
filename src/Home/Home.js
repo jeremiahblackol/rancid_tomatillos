@@ -6,7 +6,7 @@ function Home(props) {
     return (
         <div className="App">
             <section className='movie-card-section' id='home-component'>
-                <Movies movies={props.allMovies}/>
+                <Movies movies={props.allMovies} loggedIn={props.loggedIn} favorites={props.favorites}/>
             </section> 
         </div>
     )

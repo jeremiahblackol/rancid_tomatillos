@@ -1,9 +1,10 @@
 import React from 'react';
 import './App.css';
-import { getAllMovies, attemptLogIn, fetchUserRatings } from './../apiCalls';
+import { getAllMovies, attemptLogIn, fetchUserRatings, fetchFavorites } from './../apiCalls';
 import Header from '../Header/Header';
 import LoginForm from '../LoginForm/LoginForm';
 import Home from '../Home/Home';
+import Favorites from '../Favorites/Favorites';
 import {
   BrowserRouter as Switch,
   Route,
@@ -22,6 +23,7 @@ class App extends React.Component {
       loggedIn: false,
       currentMovie: {},
       ratings: [],
+      favorites: [],
     }
   }
 
@@ -60,15 +62,16 @@ class App extends React.Component {
   }
 
   getUserRatings = (info) => {
-    console.log(info);
     if (info) {
       this.setState({ 
         userInfo: info,
         loggedIn: true 
       })
     
-    fetchUserRatings(info.id)
-      .then(data => this.setState({ ratings: data.ratings }))
+    Promise.all(fetchUserRatings(info.id))
+      .then(data => this.setState({ 
+        ratings: data.ratings
+      }))
     }
   }
 
@@ -96,6 +99,8 @@ class App extends React.Component {
   }
 
   render() {
+    console.log('render faves', this.state.favorites);
+    console.log('render logged in', this.state.loggedIn);
       if (!this.state.isLoaded) {
         return <p>Loading...</p>
       } else if (this.state.error) {
@@ -109,6 +114,8 @@ class App extends React.Component {
               <Route exact path="/">
               <Home 
                 allMovies={this.state.allMovies} 
+                favorites={this.state.favorites}
+                loggedIn={this.state.loggedIn}
                 />
               </Route>
               <Route path="/login">
@@ -130,6 +137,13 @@ class App extends React.Component {
                   loggedIn={this.state.loggedIn}  
                 />
               }}
+            />
+            <Route 
+              path={'/favorites'} 
+              render={() => <Favorites
+                loggedIn={this.state.loggedIn} 
+                favorites={this.state.favorites}
+              />}
             />
           </Switch>
       </main>

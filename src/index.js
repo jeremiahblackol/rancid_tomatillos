@@ -4,6 +4,7 @@ import './index.css';
 import App from './App/App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
+const cors = require('cors');
 const router = (
     <BrowserRouter>
       <App />

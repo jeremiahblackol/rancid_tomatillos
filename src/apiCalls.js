@@ -18,9 +18,8 @@ export const attemptLogIn = (info) => {
 }
 
 export const fetchUserRatings = (id) => {
-  console.log('fetch')
     return fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/users/${id}/ratings`)
-      .then(response => response.json())
+      .then(response => response.json()),
 }
 
 export const getMovieData = (movieID) => {
@@ -32,9 +31,6 @@ export const getMovieData = (movieID) => {
 }
 
 export const postNewRating = async (userID, movieID, newRating) => {
-  console.log('post userID', userID);
-  console.log('post movieID', movieID);
-  console.log('post rating', newRating);
   let rating = await fetch(`https://rancid-tomatillos.herokuapp.com/api/v2/users/${userID}/ratings`, {
     method: 'POST',
     headers: {
@@ -61,4 +57,9 @@ export const removeRating = async (userID, ratingID) => {
       }
     })
   return rating;
+}
+
+export const fetchFavorites = () => {
+  return fetch('http://localhost:3002/api/v1/favorites')
+    .then(response => response.json())
 }
