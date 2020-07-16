@@ -23,12 +23,13 @@ class App extends React.Component {
       loggedIn: false,
       currentMovie: {},
       ratings: [],
-      favorites: [],
+      faves: [],
     }
   }
 
   componentDidMount() { 
     this.getMovies()
+    this.getFaves()
   }
 
   getMovies = () => {
@@ -75,6 +76,12 @@ class App extends React.Component {
     }
   }
 
+  getFaves = () => {
+    fetchFavorites()
+        .then(data => this.setState({ faves: data }))
+        .catch(err => console.error(err))
+  }
+
   showMoviePage = (routerProps) => {
     let movieID = parseInt(routerProps)
     let foundMovie = this.state.allMovies.find(movie => parseInt(movie.id) === movieID)
@@ -99,8 +106,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log('render faves', this.state.favorites);
-    console.log('render logged in', this.state.loggedIn);
       if (!this.state.isLoaded) {
         return <p>Loading...</p>
       } else if (this.state.error) {
@@ -114,14 +119,22 @@ class App extends React.Component {
               <Route exact path="/">
               <Home 
                 allMovies={this.state.allMovies} 
-                favorites={this.state.favorites}
+                faves={this.state.faves}
                 loggedIn={this.state.loggedIn}
+                getFaves={this.getFaves}
                 />
               </Route>
               <Route path="/login">
               <LoginForm 
                 handleSubmit={this.handleSubmit}
                 loggedIn={this.state.loggedIn}
+              />
+            </Route>
+            <Route path='/favorites'>
+              <Favorites
+                loggedIn={this.state.loggedIn}
+                getFaves={this.getFaves}
+                faves={this.state.faves}
               />
             </Route>
             <Route 
@@ -138,11 +151,6 @@ class App extends React.Component {
                 />
               }}
             />
-            <Route path={'/favorites'}>
-              <Favorites
-                loggedIn={this.state.loggedIn}
-              />
-            </Route>
           </Switch>
       </main>
    </div>

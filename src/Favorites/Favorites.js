@@ -11,7 +11,7 @@ class Favorites extends React.Component {
         super(props)
         this.state = {
             loggedIn: this.props.loggedIn,
-            faves: null,
+            faves: [],
         }
     }
 
@@ -39,7 +39,7 @@ class Favorites extends React.Component {
                 <a className='login-link' href='/'>Go Home</a>
             </div>
         } else {
-            return (this.state.faves) ? (
+            return (!this.state.faves.length === 0) ? (
                 <>
                 <h3 className='favorite-header'>Your Favorite Movies:</h3>
                 <section className='movie-card-section'>
@@ -66,10 +66,10 @@ class Favorites extends React.Component {
                 </section>
                 </>
             ) : 
-            <>
+            <div className='four-oh-four'>
                 <h3 className='favorite-header'>You don't have any favorite movies yet!</h3>
-                <NavLink className='remove-fave' to='/' from='/favorites'>Home</NavLink>
-            </>;
+                <NavLink to='/'><button className='remove-fave'>Home</button></NavLink>
+            </div>;
         }
         
     }

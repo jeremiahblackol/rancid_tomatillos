@@ -18,7 +18,6 @@ class Movies extends React.Component {
     
     toggleFavorite = (event, movie) => {
         let data = event.target.dataset;
-        console.log('movie', movie);
         if (data.fave) {
             this.removeFave(Number(data.id))
         } else if (!data.fave) {
@@ -45,20 +44,19 @@ class Movies extends React.Component {
     }
 
     render() {
-        console.log('movie faves', this.state.faves);
         return (
             this.props.movies.map(movie => {
                 let isFavorite = this.state.faves.find(fave => fave.id === movie.id);
                 return (
                     <div className='movie-container'>
-                    <img 
+                    {this.props.loggedIn ? <img 
                         src={isFavorite ? require('../images/tomatillo-yes.png') : require('../images/tomatillo-no.png')} 
                         alt={isFavorite ? 'favorite' : 'not favorite'} 
                         className='tomatillo-fave-main'
                         onClick={(event) => this.toggleFavorite(event, movie)}
                         data-id={movie.id}
                         data-fave={isFavorite}
-                    />
+                    />: null}
                     <NavLink className='movie-card-nav' to={`/movies/${movie.id}`} key={movie.id}>
                     <article 
                         className='movie-card' 

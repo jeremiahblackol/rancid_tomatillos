@@ -3,9 +3,8 @@ import './Header.css';
 import {
     BrowserRouter as Router,
     Redirect,
-    NavLink
+    Link
   } from "react-router-dom";
-  import { createBrowserHistory } from 'history';
 
 function Header(props) {
 
@@ -21,7 +20,7 @@ function Header(props) {
              {!props.userInfo.id ? 
              <li><a className='login-link' href="/login">Login</a></li> : 
              <>
-             <NavLink className='login-link' to={'/favorites'}>Favorites</NavLink>
+             <Link className='login-link' to={'/favorites'}>Favorites</Link>
              <a className='login-link' href="/">Logout</a>
              </>
              }
