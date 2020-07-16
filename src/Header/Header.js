@@ -2,10 +2,12 @@ import React from 'react';
 import './Header.css';
 import {
     BrowserRouter as Router,
+    Link
   } from "react-router-dom";
 
 function Header(props) {
-    return ( 
+
+  return ( 
     <div className='header'>    
     <h1 className='header-title'>Rancid Tomatillos</h1>
       {props.userInfo.name ? 
@@ -16,12 +18,16 @@ function Header(props) {
            <ul className='header-list'>
              {!props.userInfo.id ? 
              <li><a className='login-link' href="/login">Login</a></li> : 
-             <li><a className='login-link' href="/">Logout</a></li>}
+             <>
+             <Link className='login-link' to='/favorites'>Favorites</Link>
+             <a className='login-link' href="/">Logout</a>
+             </>
+             }
            </ul>
          </nav>
-         </Router>
+        </Router>
     </div>
-    )
+  )
 }
 
 export default Header;

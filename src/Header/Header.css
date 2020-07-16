@@ -41,6 +41,8 @@
     padding: 2px;
     border: 2px outset #dd694c;
     border-radius: 5px;
+    margin: 5px;
+    background-color: #4b8538;
 }
 
 .login-link:hover {

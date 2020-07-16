@@ -1,8 +1,6 @@
 import React from 'react';
 import './LoginForm.css';
-import {
-    BrowserRouter as Redirect
-  } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 
 class LoginForm extends React.Component {
@@ -34,7 +32,7 @@ class LoginForm extends React.Component {
     render() {
         const loggedIn = this.props.loggedIn;
         if (loggedIn) {
-            return <Redirect to='/' />
+            return <Redirect from='/login' to='/' />
         } else {
         return (
             <form className= 'login'> Log In:

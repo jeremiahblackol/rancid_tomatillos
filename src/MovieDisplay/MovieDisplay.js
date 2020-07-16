@@ -1,6 +1,6 @@
 import React from 'react';
 import './movieDisplay.css';
-import { getMovieData, postNewRating, removeRating } from '../apiCalls';
+import { getMovieData, postNewRating, removeRating, fetchFavorites, deleteFavorite, addFavorite } from '../apiCalls';
 
 
 
@@ -12,12 +12,12 @@ class MovieDisplay extends React.Component {
             error: null,
             loggedIn: this.props.loggedIn,
             ratingValue: '',
-            allRatings: this.props.ratings
+            allRatings: this.props.ratings,
+            faves: [],
         }
     }
 
     componentDidMount() {
-        console.log(this.state.ratingValue);
         Promise.all(getMovieData(this.props.movieID))
         .then(
             (data) => {this.movieAndVideoState(data)
@@ -29,6 +29,36 @@ class MovieDisplay extends React.Component {
               })
             }
           )
+          this.getFaves()
+        
+    }
+
+    toggleFavorite = (event) => {
+        let movie = this.state.movie;
+        let data = event.target.dataset;
+        if (data.fave) {
+            this.removeFave(Number(data.id))
+        } else if (!data.fave) {
+            this.addFave(Number(data.id), movie)
+        }
+    }
+    
+    getFaves = () => {
+        fetchFavorites()
+            .then(data => this.setState({ faves: data }))
+            .catch(err => console.error(err))
+    }
+
+    removeFave = (id) => {
+        deleteFavorite(id)
+            .then(() => this.getFaves())
+            .catch(err => console.error(err))
+    }
+
+    addFave = (id, movie) => {
+        addFavorite(id, movie)
+            .then(() => this.getFaves())
+            .catch(err => console.error(err))
     }
 
      movieAndVideoState = (info) => {
@@ -97,6 +127,19 @@ class MovieDisplay extends React.Component {
         }
     }
 
+    showFavorite = () => {
+        let isFavorite = this.state.faves.find(fave => fave.id === this.props.movieID)
+        return (
+            <img
+                data-fave={isFavorite}
+                data-id={this.props.movieID} 
+                src={isFavorite ? require('../images/tomatillo-yes.png') : require('../images/tomatillo-no.png')} 
+                alt={isFavorite ? 'favorite' : 'not favorite'} 
+                className='tomatillo-fave'
+                onClick={(event) => this.toggleFavorite(event)}
+            />)
+    }
+
     render() {
         if (this.state.error) {
             return <h1>ERROR: {this.state.error.message}</h1>
@@ -128,6 +171,8 @@ class MovieDisplay extends React.Component {
                         <p>Average Rating: { Math.round(this.state.movie.average_rating) }</p>
                         <p>Released: { this.state.movie.release_date }</p>
                         <p>{ this.state.movie.overview }</p>
+                        {this.props.loggedIn ? this.showFavorite() : null}
+                        {this.props.loggedIn ? this.showRatingForm() : null}
                         </div>
                     </div>
                     <p>Genres:</p>
@@ -135,7 +180,6 @@ class MovieDisplay extends React.Component {
                     <p>Budget: { `$${this.state.movie.budget}` }</p>
                     <p>Revenue: { `$${this.state.movie.revenue}` }</p>
                     <p>Runtime: { this.state.movie.runtime } minutes</p>
-                    {this.props.loggedIn ? this.showRatingForm() : null}
                 </section>
             </div>
         )

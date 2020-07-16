@@ -1,9 +1,10 @@
 import React from 'react';
 import './App.css';
-import { getAllMovies, attemptLogIn, fetchUserRatings } from './../apiCalls';
+import { getAllMovies, attemptLogIn, fetchUserRatings, fetchFavorites } from './../apiCalls';
 import Header from '../Header/Header';
 import LoginForm from '../LoginForm/LoginForm';
 import Home from '../Home/Home';
+import Favorites from '../Favorites/Favorites';
 import {
   BrowserRouter as Switch,
   Route,
@@ -22,12 +23,14 @@ class App extends React.Component {
       loggedIn: false,
       currentMovie: {},
       ratings: [],
+      faves: [],
+      location: window.location.pathname,
     }
   }
 
   componentDidMount() { 
-    console.log('app did mount')
     this.getMovies()
+    this.getFaves()
   }
 
   getMovies = () => {
@@ -68,8 +71,16 @@ class App extends React.Component {
       })
     
     fetchUserRatings(info.id)
-      .then(data => this.setState({ ratings: data.ratings }))
+      .then(data => this.setState({ 
+        ratings: data.ratings
+      }))
     }
+  }
+
+  getFaves = () => {
+    fetchFavorites()
+        .then(data => this.setState({ faves: data }))
+        .catch(err => console.error(err))
   }
 
   showMoviePage = (routerProps) => {
@@ -95,24 +106,6 @@ class App extends React.Component {
         null)
   }
 
-  // getUserRatings = (id) => {
-  //   fetchUserRatings(id)
-  //     .then(response => this.setState({ ratings: response.ratings }))
-  // }
-
-
-
-
-  deleteRating = async (ratingID, movieID) => {
-    // this.setState({ isLoaded: false })
-    // let deleted = await removeRating(this.state.userInfo, ratingID)
-    // let userRatings = await fetchUserRatings(this.state.userInfo.id)
-    // this.setState({ ...this.state, ratings: userRatings.ratings })
-    // console.log('userRatings', userRatings);
-    // console.log('after delete fetch', this.state.ratings)
-    // this.showMoviePage(movieID, userRatings)
-  }
-
   render() {
       if (!this.state.isLoaded) {
         return <p>Loading...</p>
@@ -124,17 +117,22 @@ class App extends React.Component {
             <main>
             <Header userInfo={this.state.userInfo} />
             <Switch>
-              <Route exact path="/">
-              <Home 
+              <Route exact path="/" render={ () => <Home 
                 allMovies={this.state.allMovies} 
-                />
-              </Route>
-              <Route path="/login">
-              <LoginForm 
+                faves={this.state.faves}
+                loggedIn={this.state.loggedIn}
+                getFaves={this.getFaves}
+                />}/>
+              <Route path="/login" render={ () => <LoginForm 
                 handleSubmit={this.handleSubmit}
                 loggedIn={this.state.loggedIn}
               />
-            </Route>
+              }/>
+            <Route path='/favorites' render={() => <Favorites
+                loggedIn={this.state.loggedIn}
+                getFaves={this.getFaves}
+                faves={this.state.faves}
+              />}/>
             <Route 
               path={'/movies/:id'} 
               render={ routerProps => {

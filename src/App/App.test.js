@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import Home from '../Home/Home';
 import LoginForm from '../LoginForm/LoginForm';
 import { getAllMovies } from '../apiCalls';
 
@@ -62,7 +61,8 @@ describe('App', () => {
     const { getByText } = render(
       <BrowserRouter>
         <App /> 
-      </BrowserRouter>  );
+      </BrowserRouter>  
+      );
 
     const container = await waitFor(() => getByText('Rancid Tomatillos'));
     expect(container).toBeInTheDocument();

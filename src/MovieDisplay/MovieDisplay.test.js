@@ -2,9 +2,9 @@ import React from 'react';
 import MovieDisplay from '../MovieDisplay/MovieDisplay';
 import App from '../App/App';
 
-import { render, waitFor, getByText } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { getMovieData, getAllMovies } from '../apiCalls';
 
 jest.mock('../apiCalls');
@@ -59,16 +59,16 @@ describe('MovieDisplay', () => {
         }]
     }])
 
-    it('Should render a movie display', async() => {
-        const { getByText} = render( 
-            <BrowserRouter>
+    it('should render a movie display', async() => {
+        const { getByText } = render( 
+            <MemoryRouter>
               <App />
-            </BrowserRouter>);
+            </MemoryRouter>);
 
          render( 
-        <BrowserRouter>
+        <MemoryRouter>
             <MovieDisplay />
-        </BrowserRouter> )
+        </MemoryRouter> )
 
         const header = await waitFor(() => getByText('Rancid Tomatillos'))
         expect(header).toBeInTheDocument()
@@ -76,5 +76,35 @@ describe('MovieDisplay', () => {
         const movieTitle = await waitFor(() => getByText("Artemis Fowl", {exact: false}))
 
         expect(movieTitle).toBeInTheDocument()
+    });
+
+    it.skip('should display movie rating if logged in', async () => {
+        render(
+            <MemoryRouter>
+                <App />
+            </MemoryRouter>
+        );
+        const { getByText, debug } = render(
+            <MemoryRouter>
+                <MovieDisplay 
+                    allMovies={getAllMovies.mockResolvedValue()}
+                    movieID={475430}
+                    userInfo={{id: 56}}
+                    ratings={[{
+                        "id": 1319,
+                        "user_id": 56,
+                        "movie_id": 475430,
+                        "rating": 2,
+                        "created_at": "2020-07-12T23:13:01.015Z",
+                        "updated_at": "2020-07-12T23:13:01.015Z"
+                        }]}
+                    getUserRatings={jest.fn()}
+                    loggedIn={true}
+                />
+            </MemoryRouter>
+        )
+        debug()
+        const movieRating = await waitFor(() => getByText('Rating: 2'))
+        expect(movieRating).toBeInTheDocument()
     });
 });
