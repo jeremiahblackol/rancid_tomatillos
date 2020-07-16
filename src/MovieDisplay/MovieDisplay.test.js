@@ -2,7 +2,7 @@ import React from 'react';
 import MovieDisplay from '../MovieDisplay/MovieDisplay';
 import App from '../App/App';
 
-import { render, waitFor, getByText } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { MemoryRouter } from 'react-router-dom';
 import { getMovieData, getAllMovies } from '../apiCalls';

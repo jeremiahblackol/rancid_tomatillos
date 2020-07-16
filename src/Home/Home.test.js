@@ -1,5 +1,4 @@
 import React from 'react';
-import Home from './Home';
 import App from '../App/App';
 
 import { render, waitFor } from '@testing-library/react';
@@ -8,7 +7,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 describe('Home', () => {
     it.skip('should render correctly on page load', async () => {
-        const { getByText, debug } = render(
+        const { getByText } = render(
             <MemoryRouter>
                 <App />
             </MemoryRouter>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import Home from '../Home/Home';
 import LoginForm from '../LoginForm/LoginForm';
 import { getAllMovies } from '../apiCalls';
 

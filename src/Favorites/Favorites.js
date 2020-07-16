@@ -3,7 +3,7 @@ import './Favorites.css';
 import {
     BrowserRouter as NavLink,
   } from "react-router-dom";
-import { fetchFavorites, deleteFavorite, addFavorite } from '../apiCalls';
+import { fetchFavorites, deleteFavorite } from '../apiCalls';
 
 
 class Favorites extends React.Component {
