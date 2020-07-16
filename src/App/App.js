@@ -24,6 +24,7 @@ class App extends React.Component {
       currentMovie: {},
       ratings: [],
       faves: [],
+      location: window.location.pathname,
     }
   }
 
@@ -116,27 +117,22 @@ class App extends React.Component {
             <main>
             <Header userInfo={this.state.userInfo} />
             <Switch>
-              <Route exact path="/">
-              <Home 
+              <Route exact path="/" render={ () => <Home 
                 allMovies={this.state.allMovies} 
                 faves={this.state.faves}
                 loggedIn={this.state.loggedIn}
                 getFaves={this.getFaves}
-                />
-              </Route>
-              <Route path="/login">
-              <LoginForm 
+                />}/>
+              <Route path="/login" render={ () => <LoginForm 
                 handleSubmit={this.handleSubmit}
                 loggedIn={this.state.loggedIn}
               />
-            </Route>
-            <Route path='/favorites'>
-              <Favorites
+              }/>
+            <Route path='/favorites' render={() => <Favorites
                 loggedIn={this.state.loggedIn}
                 getFaves={this.getFaves}
                 faves={this.state.faves}
-              />
-            </Route>
+              />}/>
             <Route 
               path={'/movies/:id'} 
               render={ routerProps => {

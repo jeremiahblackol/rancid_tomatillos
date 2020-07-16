@@ -33,7 +33,7 @@ class Favorites extends React.Component {
     }
 
     render() {
-        if (this.state.loggedIn) {
+        if (!this.state.loggedIn) {
             return <div className='four-oh-four'>
                 <h3 className='favorite-header'>404: Page Not Found</h3>
                 <a className='login-link' href='/'>Go Home</a>

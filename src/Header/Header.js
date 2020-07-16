@@ -2,7 +2,6 @@ import React from 'react';
 import './Header.css';
 import {
     BrowserRouter as Router,
-    Redirect,
     Link
   } from "react-router-dom";
 
@@ -20,13 +19,13 @@ function Header(props) {
              {!props.userInfo.id ? 
              <li><a className='login-link' href="/login">Login</a></li> : 
              <>
-             <Link className='login-link' to={'/favorites'}>Favorites</Link>
+             <Link className='login-link' to='/favorites'>Favorites</Link>
              <a className='login-link' href="/">Logout</a>
              </>
              }
            </ul>
          </nav>
-         </Router>
+        </Router>
     </div>
   )
 }
